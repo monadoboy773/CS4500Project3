@@ -27,8 +27,8 @@ void* producer(void* arg) {
 
     // open file
     if(file == NULL) {
-        perror("fopen");
-        exit(EXIT_FAILURE);
+        printf("ERROR: message.txt is empty\n");
+		return 0;
     }
 
     // read from file and put into buffer
@@ -44,7 +44,6 @@ void* producer(void* arg) {
         // signal that buffer is not empty
         pthread_cond_signal(&fill_c);
         pthread_mutex_unlock(&mutex);
-        usleep(100000);
     }
 
     // close file
@@ -68,7 +67,6 @@ void* consumer(void* arg) {
         pthread_mutex_unlock(&mutex);
         // print character
         printf("%c", value);
-        usleep(100000);
         fflush(stdout);
     }
     return NULL;
@@ -108,7 +106,7 @@ int main() {
     // destroy condition variables
     pthread_cond_destroy(&empty);
     pthread_cond_destroy(&fill_c);
-    pthread_cond_destroy(&mutex);
+    pthread_mutex_destroy(&mutex);
 
     return 0;
 }

@@ -43,7 +43,7 @@ void *num_substring(void *num)
 	int i,j,k;
 	int count;
 	int start = *((int *)num);
-	int end = start + (n1/4) - n2 + 1;
+	int end = start + (n1/NUM_THREADS) - n2 + 1;
 
 	for(i = start; i <= end; i++){   
 		count = 0;
@@ -81,11 +81,11 @@ int main(int argc, char *argv[])
 		// Initializes a new thread
 		// &threads[i]: Assigns id to each index in array
 		// NULL: uses default thread attributes
-		// &num_substring: the function that the thread executes
+		// num_substring: the function that the thread executes
 		// (void *) &thread_num[i]: The input to the function
-		thread_num[i] = i * (n1/4);
+		thread_num[i] = i * (n1/NUM_THREADS); // splits substring into four parts for the threads
 		pthread_create(&threads[i],NULL, num_substring, &thread_num[i]);
-		printf("Thread %d created\n", i);
+		printf("Thread %d created\n", i+1);
 	}
 
 	for(i = 0; i < NUM_THREADS; i++)
